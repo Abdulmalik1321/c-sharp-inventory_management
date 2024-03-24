@@ -9,18 +9,17 @@ namespace Inventory
             try
             {
                 Item waterBottle = new("Water Bottle", 10, new DateTime(2023, 1, 1));
+                Item waterBottle2 = new("Water Bottle", -10, new DateTime(2023, 1, 1));
 
-                Console.WriteLine(waterBottle.GetName());
-                Console.WriteLine(waterBottle.GetQuantity());
-                Console.WriteLine(waterBottle.GetDate());
+                Store store1 = new();
+
+                store1.AddItem(waterBottle);
+                store1.AddItem(waterBottle);
+
             }
-            catch (IndexOutOfRangeException ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-            }
-            catch (System.Exception)
-            {
-                throw;
+                Console.WriteLine(ex.Message); // throw;
             }
         }
     }
@@ -43,7 +42,7 @@ class Item
         }
         else
         {
-            throw new IndexOutOfRangeException("Quantity can only be positive");
+            throw new Exception("Quantity can only be positive");
         }
         if (date is null)
         {
@@ -61,3 +60,20 @@ class Item
     public DateTime GetDate() { return _date; }
 }
 
+class Store
+{
+    private List<Item> _items = [];
+
+    public void AddItem(Item newItem)
+    {
+        _items.ForEach(item =>
+        {
+            if (item.GetName() == newItem.GetName())
+            {
+                throw new Exception("Item already exists");
+            }
+        });
+        _items.Add(newItem);
+        Console.WriteLine($"New item added successfully");
+    }
+}
