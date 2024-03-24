@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Inventory
 {
@@ -9,12 +10,19 @@ namespace Inventory
             try
             {
                 Item waterBottle = new("Water Bottle", 10, new DateTime(2023, 1, 1));
-                Item waterBottle2 = new("Water Bottle", -10, new DateTime(2023, 1, 1));
+                Item waterBottle2 = new("Water Bottle 2", 100, new DateTime(2023, 1, 1));
 
                 Store store1 = new();
 
                 store1.AddItem(waterBottle);
-                store1.AddItem(waterBottle);
+                store1.AddItem(waterBottle2);
+
+                Console.WriteLine(store1.GetItems());
+                Console.WriteLine($"========");
+                store1.DeleteItem(waterBottle);
+                Console.WriteLine($"========");
+                Console.WriteLine(store1.GetItems());
+
 
             }
             catch (Exception ex)
@@ -75,5 +83,19 @@ class Store
         });
         _items.Add(newItem);
         Console.WriteLine($"New item added successfully");
+    }
+
+    public void DeleteItem(Item itemToDelete)
+    {
+        _items.Remove(itemToDelete);
+        Console.WriteLine($"Item deleted successfully");
+
+    }
+
+    public string GetItems()
+    {
+        List<string> itemsString = [];
+        _items.ForEach(item => { itemsString.Add(item.GetName()); });
+        return String.Join(" - ", itemsString);
     }
 }
