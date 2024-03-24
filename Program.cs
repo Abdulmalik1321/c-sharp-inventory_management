@@ -23,6 +23,9 @@ namespace Inventory
                 Console.WriteLine($"========");
                 Console.WriteLine(store1.GetItems());
 
+                Console.WriteLine($"========");
+                Console.WriteLine(store1.GetCurrentVolume());
+                Console.WriteLine($"========");
 
             }
             catch (Exception ex)
@@ -97,5 +100,17 @@ class Store
         List<string> itemsString = [];
         _items.ForEach(item => { itemsString.Add(item.GetName()); });
         return String.Join(" - ", itemsString);
+    }
+
+    public int GetCurrentVolume()
+    {
+        int totalAmount = 0;
+
+        _items.ForEach(item =>
+        {
+            totalAmount += item.GetQuantity();
+        });
+
+        return totalAmount;
     }
 }
