@@ -27,6 +27,7 @@ namespace Inventory
                 Console.WriteLine(store1.GetCurrentVolume());
                 Console.WriteLine($"========");
 
+                Console.WriteLine($"{store1.FindItemByName("Water Bottle 2").GetQuantity()}");
             }
             catch (Exception ex)
             {
@@ -112,5 +113,19 @@ class Store
         });
 
         return totalAmount;
+    }
+
+    public Item FindItemByName(string name)
+    {
+        Item? itemToFind = _items.Find(item => item.GetName().ToLower() == name.ToLower());
+
+        if (itemToFind is null)
+        {
+            throw new Exception($"Item {name} does not exists");
+        }
+        else
+        {
+            return itemToFind;
+        }
     }
 }
