@@ -27,8 +27,6 @@ namespace Inventory
 }
 
 
-
-
 class Item
 {
     private string _name;
