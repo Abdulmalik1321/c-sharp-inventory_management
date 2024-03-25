@@ -92,5 +92,57 @@ namespace inventory_management.src
             return _items.OrderBy(item => item.GetName()).ToList();
         }
 
+        public List<Item> collectionSortedByDate(string order)
+        {
+            if (order == "asc")
+            {
+                return _items.OrderByDescending(d => d.GetDate()).ToList();
+            }
+            else if (order == "desc")
+            {
+                return _items.OrderBy(d => d.GetDate()).ToList();
+            }
+            else
+            {
+                throw new Exception("please specify sorting order (asc or desc)");
+            }
+        }
+
+        public Dictionary<string, List<Item>> GroupByDate()
+        {
+            Dictionary<string, List<Item>> groupedItems = new Dictionary<string, List<Item>>();
+            // {
+            //     {"New", []},
+            //     }; // New Old
+
+            _items.ForEach(item =>
+            {
+                if (item.GetDate().AddMonths(3) > DateTime.Now)
+                {
+                    if (groupedItems.ContainsKey("New"))
+                    {
+                        groupedItems["New"].Add(item);
+                    }
+                    else
+                    {
+                        groupedItems.Add("New", [item]);
+                    }
+                }
+                else
+                {
+                    if (groupedItems.ContainsKey("Old"))
+                    {
+                        groupedItems["Old"].Add(item);
+                    }
+                    else
+                    {
+                        groupedItems.Add("Old", [item]);
+                    }
+                }
+            });
+
+            return groupedItems;
+        }
+
     }
 }
