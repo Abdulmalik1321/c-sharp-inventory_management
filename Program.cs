@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using inventory_management.src;
+using InventoryManagement.src;
 
 namespace Inventory
 {
