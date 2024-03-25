@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 
 namespace inventory_management.src
 {
-    public class Store
+    public class Store()
     {
         private List<Item> _items = [];
         private int _capacity = 1000;
+
+        private string _name = "Default";
 
         public void AddItem(Item newItem)
         {
@@ -34,11 +36,19 @@ namespace inventory_management.src
 
         }
 
-        public string GetItems()
+        public string GetName()
         {
-            List<string> itemsString = [];
-            _items.ForEach(item => { itemsString.Add(item.GetName()); });
-            return String.Join(" - ", itemsString);
+            return _name;
+        }
+        public void ChangeName(string name)
+        {
+            _name = name;
+        }
+        public List<Item> GetItems()
+        {
+            List<Item> itemsString = [];
+            _items.ForEach(item => { itemsString.Add(item); });
+            return itemsString;
         }
 
         public int GetCapacity()
