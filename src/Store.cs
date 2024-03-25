@@ -8,6 +8,7 @@ namespace inventory_management.src
     public class Store
     {
         private List<Item> _items = [];
+        private int _capacity = 1000;
 
         public void AddItem(Item newItem)
         {
@@ -16,6 +17,10 @@ namespace inventory_management.src
                 if (item.GetName() == newItem.GetName())
                 {
                     throw new Exception("Item already exists");
+                }
+                else if (this.GetCurrentVolume() + newItem.GetQuantity() > this.GetCapacity())
+                {
+                    throw new Exception("Store reached maximum capacity");
                 }
             });
             _items.Add(newItem);
@@ -34,6 +39,26 @@ namespace inventory_management.src
             List<string> itemsString = [];
             _items.ForEach(item => { itemsString.Add(item.GetName()); });
             return String.Join(" - ", itemsString);
+        }
+
+        public int GetCapacity()
+        {
+            return _capacity;
+        }
+
+        public void ChangeCapacity(int newCapacity)
+        {
+            if (newCapacity > 0)
+            {
+                _capacity = newCapacity;
+                Console.WriteLine($"Store maximum capacity updated successfully");
+
+            }
+            else
+            {
+                Console.WriteLine($"Store capacity can only be positive");
+
+            }
         }
 
         public int GetCurrentVolume()
@@ -66,5 +91,6 @@ namespace inventory_management.src
         {
             return _items.OrderBy(item => item.GetName()).ToList();
         }
+
     }
 }

@@ -12,15 +12,19 @@ namespace Inventory
             {
                 Item waterBottle = new("Water Bottle", 10, new DateTime(2023, 1, 1));
 
-                Item notebook = new("Notebook", 5, new DateTime(2023, 3, 1));
-                Item pen = new("Pen", 20, new DateTime(2023, 4, 1));
-                Item tissuePack = new("ATissue Pack", 30, new DateTime(2023, 5, 1));
+                Item notebook = new("Notebook", 500, new DateTime(2023, 3, 1));
+                Item pen = new("Pen", 200, new DateTime(2023, 4, 1));
+                Item tissuePack = new("ATissue Pack", 300, new DateTime(2023, 5, 1));
 
                 Store store1 = new();
 
                 store1.AddItem(waterBottle);
                 store1.AddItem(notebook);
                 store1.AddItem(pen);
+                Console.WriteLine($"{store1.GetCapacity()}");
+
+                store1.ChangeCapacity(1200);
+                Console.WriteLine($"{store1.GetCapacity()}");
                 store1.AddItem(tissuePack);
 
                 Console.WriteLine(store1.GetItems());
