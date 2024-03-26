@@ -14,11 +14,6 @@ namespace Inventory
 
         static void Main(string[] args)
         {
-
-
-
-
-
             string? GetInput(string msg)
             {
                 while (true)
@@ -46,31 +41,31 @@ namespace Inventory
 
             Store store = new();
 
-            Item waterBottle = new("Water Bottle", 10, new DateTime(2023, 1, 1));
-            Item notebook = new("Notebook", 500, new DateTime(2023, 3, 1));
-            Item pen = new("Pen", 200, new DateTime(2023, 4, 1));
-            Item tissuePack = new("ATissue Pack", 300, new DateTime(2024, 5, 1));
-            Item chocolateBar = new Item("Chocolate Bar", 15, new DateTime(2023, 2, 1));
-            Item chipsBag = new Item("Chips Bag", 25, new DateTime(2023, 6, 1));
-            Item sodaCan = new Item("Soda Can", 8, new DateTime(2023, 7, 1));
-            Item soap = new Item("Soap", 12, new DateTime(2023, 8, 1));
-            Item shampoo = new Item("Shampoo", 40, new DateTime(2023, 9, 1));
-            Item toothbrush = new Item("Toothbrush", 50, new DateTime(2023, 10, 1));
-            Item coffee = new Item("Coffee", 20);
-            Item sandwich = new Item("Sandwich", 15);
-            Item batteries = new Item("Batteries", 10);
-            Item umbrella = new Item("Umbrella", 5);
+            // Item waterBottle = new Item { Name = "Water Bottle", Quantity = 10, Date = new DateTime(2023, 1, 1) };
+            // Item notebook = new Item { Name = "Notebook", Quantity = 500, Date = new DateTime(2023, 3, 1) };
+            // Item pen = new Item { Name = "Pen", Quantity = 200, Date = new DateTime(2023, 4, 1) };
+            // Item tissuePack = new Item { Name = "ATissue Pack", Quantity = 300, Date = new DateTime(2024, 5, 1) };
+            // Item chocolateBar = new Item { Name = "Chocolate Bar", Quantity = 15, Date = new DateTime(2023, 2, 1) };
+            // Item chipsBag = new Item { Name = "Chips Bag", Quantity = 25, Date = new DateTime(2023, 6, 1) };
+            // Item sodaCan = new Item { Name = "Soda Can", Quantity = 8, Date = new DateTime(2023, 7, 1) };
+            // Item soap = new Item { Name = "Soap", Quantity = 12, Date = new DateTime(2023, 8, 1) };
+            // Item shampoo = new Item { Name = "Shampoo", Quantity = 40, Date = new DateTime(2023, 9, 1) };
+            // Item toothbrush = new Item { Name = "Toothbrush", Quantity = 50, Date = new DateTime(2023, 10, 1) };
+            // Item coffee = new Item { Name = "Coffee", Quantity = 20 };
+            // Item sandwich = new Item { Name = "Sandwich", Quantity = 15 };
+            // Item batteries = new Item { Name = "Batteries", Quantity = 10 };
+            // Item umbrella = new Item { Name = "Umbrella", Quantity = 5 };
 
-            store.AddItem(chocolateBar);
-            store.AddItem(chipsBag);
-            store.AddItem(sodaCan);
-            store.AddItem(soap);
-            store.AddItem(shampoo);
-            store.AddItem(toothbrush);
-            store.AddItem(coffee);
-            store.AddItem(sandwich);
-            store.AddItem(batteries);
-            store.AddItem(umbrella);
+            // store.AddItem(chocolateBar);
+            // store.AddItem(chipsBag);
+            // store.AddItem(sodaCan);
+            // store.AddItem(soap);
+            // store.AddItem(shampoo);
+            // store.AddItem(toothbrush);
+            // store.AddItem(coffee);
+            // store.AddItem(sandwich);
+            // store.AddItem(batteries);
+            // store.AddItem(umbrella);
 
 
             Console.Clear();
@@ -116,21 +111,24 @@ ___  ___                                                  _
 
 
 
-            while (true)
+            if (store.Name == "Default")
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"Welcome to [Inventory Management] enter the name of your store");
-                Console.ResetColor();
-                string? nameInput = Console.ReadLine();
-                if (nameInput is null || nameInput == "")
+                while (true)
                 {
-                    Console.WriteLine($"please provide a value");
-                    continue;
-                }
-                else
-                {
-                    store.ChangeName(nameInput);
-                    break;
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"Welcome to [Inventory Management] enter the name of your store");
+                    Console.ResetColor();
+                    string? nameInput = Console.ReadLine();
+                    if (nameInput is null || nameInput == "")
+                    {
+                        Console.WriteLine($"please provide a value");
+                        continue;
+                    }
+                    else
+                    {
+                        store.ChangeName(nameInput);
+                        break;
+                    }
                 }
             }
             while (true)
@@ -197,7 +195,7 @@ ___  ___                                                  _
 
                                 if (itemName is not null && itemQty is not null)
                                 {
-                                    Item newItem = new(itemName, int.Parse(itemQty), itemDate is not null ? DateTime.Parse(itemDate) : null);
+                                    Item newItem = new Item { Name = itemName, Quantity = int.Parse(itemQty), Date = DateTime.Parse(itemDate) };
                                     store.AddItem(newItem);
                                 }
                             }
@@ -216,7 +214,7 @@ ___  ___                                                  _
                             ConsoleTable itemsTable = new("Name", "Qty", "Date");
                             store.GetItems().ForEach(item =>
                             {
-                                itemsTable.AddRow(item.GetName(), item.GetQuantity(), item.GetDate().ToString("dd/MM/yyyy"));
+                                itemsTable.AddRow(item.Name, item.Quantity, item.Date);
                             });
                             Console.WriteLine(itemsTable);
                             break;
@@ -244,7 +242,7 @@ ___  ___                                                  _
                             {
                                 Item item = store.FindItemByName(itemToFind);
                                 ConsoleTable ItemTable = new("Name", "Qty", "Date");
-                                ItemTable.AddRow(item.GetName(), item.GetQuantity(), item.GetDate().ToString("dd/MM/yyyy"));
+                                ItemTable.AddRow(item.Name, item.Quantity, item.Date);
                                 Console.WriteLine(ItemTable);
                             }
                             break;
@@ -253,7 +251,7 @@ ___  ___                                                  _
                             ConsoleTable sortedItemsTable = new("Name", "Qty", "Date");
                             store.SortByNameAsc().ForEach(item =>
                             {
-                                sortedItemsTable.AddRow(item.GetName(), item.GetQuantity(), item.GetDate().ToString("dd/MM/yyyy"));
+                                sortedItemsTable.AddRow(item.Name, item.Quantity, item.Date);
                             });
                             Console.WriteLine(sortedItemsTable);
 
@@ -267,7 +265,7 @@ ___  ___                                                  _
                                 ConsoleTable sortedItemsByDateTable = new("Name", "Qty", "Date");
                                 store.collectionSortedByDate(sortedItemsOrder).ForEach(item =>
                                 {
-                                    sortedItemsByDateTable.AddRow(item.GetName(), item.GetQuantity(), item.GetDate().ToString("dd/MM/yyyy"));
+                                    sortedItemsByDateTable.AddRow(item.Name, item.Quantity, item.Date);
                                 });
                                 Console.WriteLine(sortedItemsByDateTable);
                             }
@@ -283,7 +281,7 @@ ___  ___                                                  _
                                 Console.WriteLine($"\n{group.Key} Items:");
                                 foreach (var item in group.Value)
                                 {
-                                    groupByDateTable.AddRow(item.GetName(), item.GetQuantity(), item.GetDate().ToString("dd/MM/yyyy"));
+                                    groupByDateTable.AddRow(item.Name, item.Quantity, item.Date);
 
                                 }
                                 Console.WriteLine(groupByDateTable);
@@ -308,6 +306,52 @@ ___  ___                                                  _
                     continue;
                 }
             }
+
+
+            // User userWrite = new User("John", 121123);
+            // UserReadDTO userRead = userWrite.ConvertToRead();
+
+
+
         }
     }
 }
+
+
+
+
+// class User
+// {
+
+//     private string _name;
+//     private int _password;
+
+//     public User(string name, int password)
+//     {
+//         _name = name;
+//         _password = password;
+//     }
+
+//     public string GetName()
+//     {
+//         return _name;
+//     }
+//     public int GetPassword()
+//     {
+//         return _password;
+//     }
+
+//     public UserReadDTO ConvertToRead()
+//     {
+//         return new UserReadDTO
+//         {
+//             Name = _name
+//         };
+//     }
+// }
+
+// class UserReadDTO
+// {
+//     public string Name { get; set; }
+// }
+

@@ -12,32 +12,53 @@ namespace InventoryManagement.src
         private int _quantity;
         private DateTime _date;
 
-
-        public Item(string name, int quantity, DateTime? date = null)
+        public string Name
         {
-            _name = name;
-            if (quantity > 0)
+            get { return _name; }
+            set { _name = value; }
+        }
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
             {
-                _quantity = quantity;
+                if (value > 0)
+                {
+                    _quantity = value;
+                }
+                else
+                {
+                    throw new Exception("Quantity can only be positive");
+                }
             }
-            else
+        }
+        public DateTime Date
+        {
+            get { return _date; }
+            set
             {
-                throw new Exception("Quantity can only be positive");
+                if (value != null)
+                {
+                    _date = DateTime.Now;
+                }
+                else
+                {
+                    _date = (DateTime)value;
+                }
             }
-            if (date is null)
-            {
-                _date = DateTime.Now;
-            }
-            else
-            {
-                _date = (DateTime)date;
-            }
-
         }
 
-        public string GetName() { return _name; }
-        public int GetQuantity() { return _quantity; }
-        public DateTime GetDate() { return _date; }
+
+
+
+        // public string GetName() { return _name; }
+        // public int GetQuantity() { return _quantity; }
+        // public DateTime GetDate() { return _date; }
+
+        // public override string ToString()
+        // {
+        //     return _name;
+        // }
     }
 
 }
