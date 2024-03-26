@@ -109,7 +109,7 @@ ___  ___                                                  _
                 {"8. ChangeCapacity", "Change the maximum capacity"},
                 {"9. FindItemByName", "Find Item By Name"},
                 {"10. SortByNameAsc", "Get all the items sorted by name"},
-                {"10. collectionSortedByDate", "sort items by date (asc or desc)"},
+                {"11. collectionSortedByDate", "sort items by date (asc or desc)"},
                 {"12. GroupByDate", "Return 2 groups [New Arrival] and [Old] items"},
             };
 
