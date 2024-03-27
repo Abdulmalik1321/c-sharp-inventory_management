@@ -40,6 +40,7 @@ namespace Inventory
 
 
             Store store = new();
+            UserRole userRole = UserRole.NULL;
 
             // Item waterBottle = new Item { Name = "Water Bottle", Quantity = 10, Date = new DateTime(2023, 1, 1) };
             // Item notebook = new Item { Name = "Notebook", Quantity = 500, Date = new DateTime(2023, 3, 1) };
@@ -106,12 +107,15 @@ ___  ___                                                  _
                 {"10. SortByNameAsc", "Get all the items sorted by name"},
                 {"11. collectionSortedByDate", "sort items by date (asc or desc)"},
                 {"12. GroupByDate", "Return 2 groups [New Arrival] and [Old] items"},
+                {"13. AddUser", "Add new user (only admin)"},
+                {"14. DeleteUser", "Delete a user (only admin)"},
+                {"15. GetUsers", "List all users in store"}
             };
 
 
 
 
-            if (store.Name == "Default")
+            if (store.GetName() == "Default")
             {
                 while (true)
                 {
@@ -131,6 +135,66 @@ ___  ___                                                  _
                     }
                 }
             }
+
+            while (true)
+            {
+                Console.WriteLine($"Default (user - pass) => (admin - admin) only for testing");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"Enter your username:");
+                Console.ResetColor();
+                string? username = Console.ReadLine();
+                if (username is null || username == "")
+                {
+                    Console.WriteLine($"please provide a value");
+                    continue;
+                }
+                else
+                {
+                    if (store.CheckUser(username))
+                    {
+
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine($"Enter your password:");
+                        Console.ResetColor();
+                        string? password = Console.ReadLine();
+                        if (password is null || password == "")
+                        {
+                            Console.WriteLine($"please provide a value");
+                            continue;
+                        }
+                        else
+                        {
+                            if (store.CheckUserPassword(username, password))
+                            {
+                                Console.Clear();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine($"Logged in successfully");
+                                Console.ResetColor();
+                                userRole = store.GetUserRole(username);
+                                break;
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine($"Wrong password");
+                                Console.ResetColor();
+                                continue;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Username does not exists");
+                        Console.ResetColor();
+                        continue;
+                    }
+                }
+            }
+
+
             while (true)
             {
                 try
@@ -170,43 +234,67 @@ ___  ___                                                  _
                             break;
 
                         case "2":
-                            Console.Clear();
-                            string? newName = GetInput("Type the new name of the store");
-                            if (newName is not null)
+                            if (userRole == UserRole.ADMIN)
                             {
-                                store.ChangeName(newName);
-                                Console.WriteLine($"Name Changed successfully");
+
+                                Console.Clear();
+                                string? newName = GetInput("Type the new name of the store");
+                                if (newName is not null)
+                                {
+                                    store.ChangeName(newName);
+                                    Console.WriteLine($"Name Changed successfully");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"you are not allowed to change store name");
                             }
 
                             break;
                         case "3":
-                            Console.Clear();
-                            string? newItemString = GetInput("Type the name & quantity date of the item {name 10 optional=>(yyyy-mm-dd)}");
-                            if (newItemString is not null)
+                            if (userRole != UserRole.EMPLOYEE)
                             {
-                                List<string?> newItemSplit = new List<string?>(newItemString.Split(" "));
-                                if (newItemSplit.Count < 3)
-                                {
-                                    newItemSplit.Add(null);
-                                }
-                                string? itemName = newItemSplit[0];
-                                string? itemQty = newItemSplit[1];
-                                string? itemDate = newItemSplit[2];
 
-                                if (itemName is not null && itemQty is not null)
+                                Console.Clear();
+                                string? newItemString = GetInput("Type the name & quantity date of the item {name 10 optional=>(yyyy-mm-dd)}");
+                                if (newItemString is not null)
                                 {
-                                    Item newItem = new Item { Name = itemName, Quantity = int.Parse(itemQty), Date = DateTime.Parse(itemDate) };
-                                    store.AddItem(newItem);
+                                    List<string?> newItemSplit = new List<string?>(newItemString.Split(" "));
+                                    if (newItemSplit.Count < 3)
+                                    {
+                                        newItemSplit.Add(null);
+                                    }
+                                    string? itemName = newItemSplit[0];
+                                    string? itemQty = newItemSplit[1];
+                                    string? itemDate = newItemSplit[2];
+
+                                    if (itemName is not null && itemQty is not null)
+                                    {
+                                        Item newItem = new Item { Name = itemName, Quantity = int.Parse(itemQty), Date = itemDate is not null ? DateTime.Parse(itemDate) : DateTime.Now };
+                                        store.AddItem(newItem);
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"you are not allowed to add new items");
                             }
                             break;
                         case "4":
-                            Console.Clear();
-                            string? itemToDelete = GetInput("Type the name of the item you want to delete");
-
-                            if (itemToDelete is not null)
+                            if (userRole != UserRole.EMPLOYEE)
                             {
-                                store.DeleteItem(store.FindItemByName(itemToDelete));
+                                Console.Clear();
+                                string? itemToDelete = GetInput("Type the name of the item you want to delete");
+
+                                if (itemToDelete is not null)
+                                {
+                                    store.DeleteItem(store.FindItemByName(itemToDelete));
+                                }
+
+                            }
+                            else
+                            {
+                                Console.WriteLine($"you are not allowed to delete items");
                             }
                             break;
                         case "5":
@@ -214,9 +302,11 @@ ___  ___                                                  _
                             ConsoleTable itemsTable = new("Name", "Qty", "Date");
                             store.GetItems().ForEach(item =>
                             {
-                                itemsTable.AddRow(item.Name, item.Quantity, item.Date);
+                                itemsTable.AddRow(item.Name, item.Quantity, item.Date.ToString("yyyy-MM-dd"));
                             });
                             Console.WriteLine(itemsTable);
+                            Console.WriteLine(userRole);
+
                             break;
                         case "6":
                             Console.Clear();
@@ -228,11 +318,19 @@ ___  ___                                                  _
                             ;
                             break;
                         case "8":
-                            Console.Clear();
-                            string? newCapacity = GetInput("Type the number of the new capacity");
-                            if (newCapacity is not null)
+                            if (userRole != UserRole.EMPLOYEE)
                             {
-                                store.ChangeCapacity(int.Parse(newCapacity));
+
+                                Console.Clear();
+                                string? newCapacity = GetInput("Type the number of the new capacity");
+                                if (newCapacity is not null)
+                                {
+                                    store.ChangeCapacity(int.Parse(newCapacity));
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"you are not allowed to change store capacity");
                             }
                             break;
                         case "9":
@@ -242,16 +340,16 @@ ___  ___                                                  _
                             {
                                 Item item = store.FindItemByName(itemToFind);
                                 ConsoleTable ItemTable = new("Name", "Qty", "Date");
-                                ItemTable.AddRow(item.Name, item.Quantity, item.Date);
+                                ItemTable.AddRow(item.Name, item.Quantity, item.Date.ToString("yyyy-MM-dd"));
                                 Console.WriteLine(ItemTable);
                             }
                             break;
                         case "10":
                             Console.Clear();
                             ConsoleTable sortedItemsTable = new("Name", "Qty", "Date");
-                            store.SortByNameAsc().ForEach(item =>
+                            store.SortByNameAsc(SortOrder.ASC).ForEach(item =>
                             {
-                                sortedItemsTable.AddRow(item.Name, item.Quantity, item.Date);
+                                sortedItemsTable.AddRow(item.Name, item.Quantity, item.Date.ToString("yyyy-MM-dd"));
                             });
                             Console.WriteLine(sortedItemsTable);
 
@@ -263,9 +361,9 @@ ___  ___                                                  _
                             if (sortedItemsOrder is not null)
                             {
                                 ConsoleTable sortedItemsByDateTable = new("Name", "Qty", "Date");
-                                store.collectionSortedByDate(sortedItemsOrder).ForEach(item =>
+                                store.collectionSortedByDate(sortedItemsOrder == "asc" ? SortOrder.ASC : SortOrder.DESC).ForEach(item =>
                                 {
-                                    sortedItemsByDateTable.AddRow(item.Name, item.Quantity, item.Date);
+                                    sortedItemsByDateTable.AddRow(item.Name, item.Quantity, item.Date.ToString("yyyy-MM-dd"));
                                 });
                                 Console.WriteLine(sortedItemsByDateTable);
                             }
@@ -281,7 +379,7 @@ ___  ___                                                  _
                                 Console.WriteLine($"\n{group.Key} Items:");
                                 foreach (var item in group.Value)
                                 {
-                                    groupByDateTable.AddRow(item.Name, item.Quantity, item.Date);
+                                    groupByDateTable.AddRow(item.Name, item.Quantity, item.Date.ToString("yyyy-MM-dd"));
 
                                 }
                                 Console.WriteLine(groupByDateTable);
@@ -290,6 +388,91 @@ ___  ___                                                  _
 
                             break;
 
+                        case "13":
+                            if (userRole == UserRole.ADMIN)
+                            {
+                                string? usernameString = GetInput("Enter new username (username password role) roles(admin, manager, employee)");
+
+                                if (usernameString is not null)
+                                {
+                                    string[] usernameSplit = usernameString.Split(" ");
+                                    UserRole role = UserRole.NULL;
+                                    bool roleAssigned = true;
+                                    if (usernameSplit[2] == "admin")
+                                    {
+                                        role = UserRole.ADMIN;
+                                    }
+                                    else if (usernameSplit[2] == "manager")
+                                    {
+                                        role = UserRole.MANAGER;
+                                    }
+                                    else if (usernameSplit[2] == "employee")
+                                    {
+                                        role = UserRole.EMPLOYEE;
+                                    }
+                                    else
+                                    {
+                                        roleAssigned = false;
+                                    }
+
+                                    if
+                                    (
+                                    !store.CheckUser(usernameSplit[0]) &&
+                                    usernameSplit[1].Length >= 3 &&
+                                    roleAssigned
+                                    )
+                                    {
+                                        User newUser = new User { Name = usernameSplit[0], Password = usernameSplit[1], Role = role };
+                                        store.AddUser(newUser);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"Something went wrong try again");
+                                        break;
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"you are not allowed to add new users");
+                            }
+                            break;
+
+
+                        case "14":
+                            if (userRole == UserRole.ADMIN)
+                            {
+                                string? usernameString = GetInput("Enter the username you want to delete");
+
+                                if (usernameString is not null)
+                                {
+                                    store.DeleteUser(usernameString);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"you are not allowed to delete users");
+                            }
+
+                            break;
+
+                        case "15":
+                            if (userRole == UserRole.ADMIN)
+                            {
+                                ConsoleTable usersTable = new("Name", "Role");
+                                store.GetUsers().ForEach(user =>
+                                {
+                                    usersTable.AddRow(user.Name, user.Role);
+                                });
+                                Console.WriteLine(usersTable);
+                            }
+                            else
+                            {
+                                Console.WriteLine($"you are not allowed to view users");
+                            }
+                            break;
 
                         default:
                             Console.WriteLine($"Invalid input");
@@ -306,52 +489,7 @@ ___  ___                                                  _
                     continue;
                 }
             }
-
-
-            // User userWrite = new User("John", 121123);
-            // UserReadDTO userRead = userWrite.ConvertToRead();
-
-
-
         }
     }
 }
-
-
-
-
-// class User
-// {
-
-//     private string _name;
-//     private int _password;
-
-//     public User(string name, int password)
-//     {
-//         _name = name;
-//         _password = password;
-//     }
-
-//     public string GetName()
-//     {
-//         return _name;
-//     }
-//     public int GetPassword()
-//     {
-//         return _password;
-//     }
-
-//     public UserReadDTO ConvertToRead()
-//     {
-//         return new UserReadDTO
-//         {
-//             Name = _name
-//         };
-//     }
-// }
-
-// class UserReadDTO
-// {
-//     public string Name { get; set; }
-// }
 

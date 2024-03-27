@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.Json;
 using Microsoft.VisualBasic;
+using System.Reflection.Metadata;
 namespace InventoryManagement.src
 {
 
@@ -12,16 +13,11 @@ namespace InventoryManagement.src
 
         private List<Item> _items = [];
         private int _capacity = 1000;
-
         private string _name = "Default";
-
-        public List<Item> Items { get { return _items; } set { _items = value; } }
-        public int Capacity { get { return _capacity; } set { _capacity = value; } }
-        public string Name { get { return _name; } set { _name = value; } }
+        private List<User> _users = [];
 
         public Store()
         {
-            // using FileStream openStream = File.OpenRead("store.json");
             string fileName = "store.json";
             string jsonString = File.ReadAllText(fileName);
             StoreReadDTO storeData = JsonSerializer.Deserialize<StoreReadDTO>(jsonString)!;
@@ -32,10 +28,85 @@ namespace InventoryManagement.src
                 _items = storeData.Items;
                 _capacity = storeData.Capacity;
                 _name = storeData.Name;
+                _users = storeData.Users;
             }
         }
 
+        public bool CheckUser(string username)
+        {
+            return _users.Exists(user => user.Name.ToLower() == username.ToLower());
+        }
 
+        public UserRole GetUserRole(string username)
+        {
+            User? user = _users.Find(user => user.Name.ToLower() == username.ToLower());
+            if (user is not null)
+            {
+                Console.WriteLine($"{user.ConvertToRead().Name}");
+
+                return user.ConvertToRead().Role;
+            }
+            else
+            {
+                throw new Exception("something went wrong");
+            }
+        }
+
+        public bool CheckUserPassword(string username, string password)
+        {
+            User? user = _users.Find(user => user.Name.ToLower() == username.ToLower());
+            if (user is not null && user.Password == password)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public List<UserReadDTO> GetUsers()
+        {
+            List<UserReadDTO> usersList = new List<UserReadDTO>();
+
+            _users.ForEach(user =>
+            {
+                usersList.Add(user.ConvertToRead());
+            });
+
+            return usersList;
+        }
+        public void AddUser(User newUser)
+        {
+            if (this.CheckUser(newUser.Name))
+            {
+                throw new Exception("User already exists");
+            }
+
+            _users.Add(newUser);
+            Console.WriteLine($"New user added successfully");
+            this.SaveData();
+        }
+
+        public void DeleteUser(string username)
+        {
+            if (this.CheckUser(username))
+            {
+                User? user = _users.Find(user => user.Name.ToLower() == username.ToLower());
+                if (user is not null)
+                {
+                    _users.Remove(user);
+                    Console.WriteLine($"User deleted successfully");
+                    this.SaveData();
+                }
+            }
+            else
+            {
+                throw new Exception("User does not exists");
+            }
+
+
+        }
 
 
         public void AddItem(Item newItem)
@@ -66,6 +137,7 @@ namespace InventoryManagement.src
         {
             _items.Remove(itemToDelete);
             Console.WriteLine($"Item deleted successfully");
+            this.SaveData();
 
         }
 
@@ -130,20 +202,28 @@ namespace InventoryManagement.src
             }
         }
 
-        public List<Item> SortByNameAsc()
+        public List<Item> SortByNameAsc(SortOrder order)
         {
-            return _items.OrderBy(item => item.Name).ToList();
+            if (order == SortOrder.ASC)
+            {
+                return _items.OrderBy(item => item.Name).ToList();
+            }
+            else if (order == SortOrder.DESC)
+            {
+                return _items.OrderByDescending(item => item.Name).ToList();
+            }
+            throw new Exception("please specify sorting order (asc or desc)");
         }
 
-        public List<Item> collectionSortedByDate(string order)
+        public List<Item> collectionSortedByDate(SortOrder order)
         {
-            if (order == "asc")
-            {
-                return _items.OrderByDescending(d => d.Date).ToList();
-            }
-            else if (order == "desc")
+            if (order == SortOrder.ASC)
             {
                 return _items.OrderBy(d => d.Date).ToList();
+            }
+            else if (order == SortOrder.DESC)
+            {
+                return _items.OrderByDescending(d => d.Date).ToList();
             }
             else
             {
@@ -193,7 +273,8 @@ namespace InventoryManagement.src
             {
                 Items = _items,
                 Capacity = _capacity,
-                Name = _name
+                Name = _name,
+                Users = _users
 
             };
         }
@@ -203,6 +284,8 @@ namespace InventoryManagement.src
         public required List<Item> Items { get; set; }
         public required int Capacity { get; set; }
         public required string Name { get; set; }
+        public required List<User> Users { get; set; }
+
     }
 }
 

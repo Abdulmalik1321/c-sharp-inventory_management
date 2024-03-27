@@ -8,13 +8,23 @@ namespace InventoryManagement.src
     public class Item
     {
 
-        private string _name;
+        private string? _name;
         private int _quantity;
         private DateTime _date;
 
         public string Name
         {
-            get { return _name; }
+            get
+            {
+                if (_name is not null)
+                {
+                    return _name;
+                }
+                else
+                {
+                    return "Default";
+                }
+            }
             set { _name = value; }
         }
         public int Quantity
@@ -37,28 +47,10 @@ namespace InventoryManagement.src
             get { return _date; }
             set
             {
-                if (value != null)
-                {
-                    _date = DateTime.Now;
-                }
-                else
-                {
-                    _date = (DateTime)value;
-                }
+                _date = (DateTime)value;
             }
         }
 
-
-
-
-        // public string GetName() { return _name; }
-        // public int GetQuantity() { return _quantity; }
-        // public DateTime GetDate() { return _date; }
-
-        // public override string ToString()
-        // {
-        //     return _name;
-        // }
     }
 
 }

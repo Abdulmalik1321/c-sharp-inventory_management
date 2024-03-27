@@ -1,1 +1,118 @@
-{"Items":[{"Name":"Chocolate Bar","Quantity":15,"Date":"2024-03-26T14:21:48.430628+03:00"},{"Name":"Chips Bag","Quantity":25,"Date":"2024-03-26T14:21:48.430698+03:00"},{"Name":"Soda Can","Quantity":8,"Date":"2024-03-26T14:21:48.430702+03:00"},{"Name":"Soap","Quantity":12,"Date":"2024-03-26T14:21:48.430703+03:00"},{"Name":"Shampoo","Quantity":40,"Date":"2024-03-26T14:21:48.430704+03:00"},{"Name":"Toothbrush","Quantity":50,"Date":"2024-03-26T14:21:48.430705+03:00"},{"Name":"Coffee","Quantity":20,"Date":"2024-03-26T14:21:48.430706+03:00"},{"Name":"Sandwich","Quantity":15,"Date":"2024-03-26T14:21:48.430707+03:00"},{"Name":"Batteries","Quantity":10,"Date":"2024-03-26T14:21:48.430707+03:00"},{"Name":"Umbrella","Quantity":5,"Date":"2024-03-26T14:21:48.430708+03:00"},{"Name":"test","Quantity":100,"Date":"2024-03-26T14:21:48.430709+03:00"}],"Capacity":1000,"Name":"Abdulmalik"}
+{
+    "Items": [
+        {
+            "Name": "Chocolate Bar",
+            "Quantity": 15,
+            "Date": "2024-03-27T10:44:23.594413+03:00"
+        },
+        {
+            "Name": "Chips Bag",
+            "Quantity": 25,
+            "Date": "2024-03-27T10:44:23.594476+03:00"
+        },
+        {
+            "Name": "Soda Can",
+            "Quantity": 8,
+            "Date": "2024-03-27T10:44:23.59448+03:00"
+        },
+        {
+            "Name": "Soap",
+            "Quantity": 12,
+            "Date": "2024-03-27T10:44:23.594481+03:00"
+        },
+        {
+            "Name": "Shampoo",
+            "Quantity": 40,
+            "Date": "2024-03-27T10:44:23.594481+03:00"
+        },
+        {
+            "Name": "Toothbrush",
+            "Quantity": 50,
+            "Date": "2024-03-27T10:44:23.594482+03:00"
+        },
+        {
+            "Name": "Coffee",
+            "Quantity": 20,
+            "Date": "2024-03-27T10:44:23.594483+03:00"
+        },
+        {
+            "Name": "Sandwich",
+            "Quantity": 15,
+            "Date": "2024-03-27T10:44:23.594484+03:00"
+        },
+        {
+            "Name": "Batteries",
+            "Quantity": 10,
+            "Date": "2024-03-27T10:44:23.594484+03:00"
+        },
+        {
+            "Name": "Umbrella",
+            "Quantity": 5,
+            "Date": "2024-03-27T10:44:23.594487+03:00"
+        },
+        {
+            "Name": "test",
+            "Quantity": 100,
+            "Date": "2024-03-27T10:44:23.594488+03:00"
+        },
+        {
+            "Name": "testttt",
+            "Quantity": 100,
+            "Date": "2024-03-27T10:44:23.594488+03:00"
+        },
+        {
+            "Name": "dasd",
+            "Quantity": 100,
+            "Date": "2024-03-27T10:44:23.594489+03:00"
+        },
+        {
+            "Name": "slakdm",
+            "Quantity": 100,
+            "Date": "2024-03-27T10:44:23.59449+03:00"
+        },
+        {
+            "Name": "lkjlkj",
+            "Quantity": 333,
+            "Date": "2024-03-27T10:44:23.59449+03:00"
+        },
+        {
+            "Name": "lkdlkn",
+            "Quantity": 3999,
+            "Date": "2024-03-27T10:44:23.594491+03:00"
+        },
+        {
+            "Name": "jjknlk",
+            "Quantity": 100,
+            "Date": "2020-10-10T00:00:00"
+        },
+        {
+            "Name": "sqax",
+            "Quantity": 23,
+            "Date": "2024-03-27T10:52:28.458917+03:00"
+        }
+    ],
+    "Capacity": 214324,
+    "Name": "Abdulmalik",
+    "Users": [
+        {
+            "Name": "admin",
+            "Password": "admin",
+            "Role": 0
+        },
+        {
+            "Name": "bader",
+            "Password": "12345",
+            "Role": 1
+        },
+        {
+            "Name": "Abdulmalik",
+            "Password": "1234",
+            "Role": 0
+        },
+        {
+            "Name": "khalid",
+            "Password": "1234",
+            "Role": 2
+        }
+    ]
+}
